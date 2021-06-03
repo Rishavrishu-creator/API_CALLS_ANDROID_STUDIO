@@ -1,81 +1,67 @@
 package com.example.apicalls;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.app.VoiceInteractor;
-import android.content.Intent;
-import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
+
 import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DataActivity extends AppCompatActivity {
+public class Add2 extends AppCompatActivity {
 
+    String category_id,name1;
     Toolbar toolbar;
     RecyclerView recyclerView;
-    RecyclerAdapter adapter;
-    LinearLayout linearLayout;
+    RecyclerAdapter1 adapter;
     ArrayList<String> name=new ArrayList<>();
     ArrayList<String> price=new ArrayList<>();
     ArrayList<String> image=new ArrayList<>();
-    RecyclerView.LayoutManager layoutManager;
+    ArrayList<String> productid=new ArrayList<>();
+    GridLayoutManager gridLayoutManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_data);
+        setContentView(R.layout.activity_add2);
+       category_id=getIntent().getStringExtra("category_id");
+       name1=getIntent().getStringExtra("name");
         toolbar=findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         recyclerView=findViewById(R.id.recycler);
-        layoutManager=new LinearLayoutManager(DataActivity.this);
+
         //recyclerView.setLayoutManager(layoutManager);
         //adapter=new RecyclerAdapter(DataActivity.this);
-        linearLayout=findViewById(R.id.add);
-        getSupportActionBar().setTitle("Manage Product");
+        gridLayoutManager=new GridLayoutManager(Add2.this,2);
+        getSupportActionBar().setTitle(name1);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24);
-        linearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(DataActivity.this,Add.class));
-                finish();
-            }
-        });
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(DataActivity.this,MainActivity.class));
+                startActivity(new Intent(Add2.this,Add.class));
                 finish();
             }
         });
-
-        RequestQueue queue= Volley.newRequestQueue(DataActivity.this);
-        String url = "https://jbmdemo.in/westwell/westwell/api/get_products_vendor";
+        RequestQueue queue= Volley.newRequestQueue(Add2.this);
+        String url = "https://jbmdemo.in/westwell/westwell/api/category_product";
         StringRequest stringRequest=new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -87,13 +73,14 @@ public class DataActivity extends AppCompatActivity {
                         String name1=jsonObject.getJSONArray("data").getJSONObject(i).getString("model");
                         String price1=jsonObject.getJSONArray("data").getJSONObject(i).getString("price");
                         String image1=jsonObject.getJSONArray("data").getJSONObject(i).getString("image1");
+                        String product_id = jsonObject.getJSONArray("data").getJSONObject(i).getString("product_id");
                         name.add(name1);
                         price.add(price1);
                         image.add(image1);
-
+                        productid.add(product_id);
                     }
-                    recyclerView.setLayoutManager(layoutManager);
-                    adapter=new RecyclerAdapter(DataActivity.this,name,price,image);
+                    recyclerView.setLayoutManager(gridLayoutManager);
+                    adapter=new RecyclerAdapter1(Add2.this,name,price,image,productid,category_id);
                     recyclerView.setAdapter(adapter);
                     Log.d("rishav",String.valueOf(name));
                     Log.d("rishav",String.valueOf(price));
@@ -106,7 +93,7 @@ public class DataActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(DataActivity.this,"Some error occurred",Toast.LENGTH_LONG).show();
+                Toast.makeText(Add2.this,"Some error occurred",Toast.LENGTH_LONG).show();
             }
         }){
             @Override
@@ -116,37 +103,11 @@ public class DataActivity extends AppCompatActivity {
                 params.put("vendor_id","2");
                 params.put("page","1");
                 params.put("limit","5");
+                params.put("category_id",category_id);
                 return params;
             }
-            /*
             @Override
-            public String getBodyContentType()
-            {
-                return "application/json; charset=utf-8";
-            }
-            @Override
-            public byte[] getBody() throws AuthFailureError {
-                try {
-                    return mRequestBody == null ? null : mRequestBody.getBytes("utf-8");
-                } catch (UnsupportedEncodingException uee) {
-                    VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", mRequestBody, "utf-8");
-                    return null;
-                }
-            }
-            /*
-            @Override
-            protected Response<String> parseNetworkResponse(NetworkResponse response) {
-                String responseString = "";
-                if (response != null) {
-                    responseString = String.valueOf(response.statusCode);
-                }
-                return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
-            }
-            */
-
-
-            @Override
-            public Map<String,String> getHeaders()throws AuthFailureError{  // For Headers
+            public Map<String,String> getHeaders()throws AuthFailureError {  // For Headers
                 Map<String,String> params=new HashMap<String, String>();
                 params.put("Content-Type","application/x-www-form-urlencoded");
                 params.put("Keydata","43564354346767");
@@ -155,6 +116,5 @@ public class DataActivity extends AppCompatActivity {
         };
         queue.add(stringRequest);
 
-        
     }
 }

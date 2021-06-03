@@ -7,64 +7,76 @@
     android:layout_height="match_parent"
     tools:context=".DataActivity">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/get_products_vendor"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:text="Get Products of a particular vendor"
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:id="@+id/toolbar"
+        android:background="@color/purple_700"
         />
-    <TextView
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_below="@+id/toolbar"
+      android:background="#0C0C0C"
+      android:id="@+id/linear"
+      android:layout_height="70dp">
+      <LinearLayout
+          android:layout_width="0dp"
+          android:layout_height="70dp"
+          android:layout_weight="1"
+          android:orientation="vertical"
+          android:id="@+id/add"
+          >
+          <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="@color/white"
+              android:padding="10dp"
+              android:layout_marginLeft="60dp"
+              android:textSize="20sp"
+              android:text="Add"
+              />
+          <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="@color/white"
+              android:layout_marginLeft="10dp"
+              android:textSize="15sp"
+              android:text="Add your new product"
+              />
+      </LinearLayout>
+      <LinearLayout
+          android:layout_width="0dp"
+          android:layout_height="70dp"
+          android:layout_weight="1"
+          android:orientation="vertical"
+          >
+          <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="@color/white"
+              android:padding="10dp"
+              android:layout_marginLeft="60dp"
+              android:textSize="20sp"
+              android:text="Filter"
+              />
+          <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="@color/white"
+              android:layout_marginLeft="50dp"
+              android:textSize="15sp"
+              android:text="No filter applied"
+              />
+      </LinearLayout>
+  </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/vendor_products"
-        android:layout_below="@+id/get_products_vendor"
-        android:layout_marginTop="10dp"
+        android:id="@+id/recycler"
+        android:layout_margin="10dp"
+        android:layout_below="@+id/linear"
         />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/vendor_products"
-        android:background="@android:color/darker_gray"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/get_category"
-        android:layout_below="@+id/vendor_products"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        android:text="Get Category"
-        />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/category_products"
-        android:layout_below="@+id/get_category"
-        android:layout_marginTop="10dp"
-        />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:id="@+id/view"
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/category_products"
-        android:background="@android:color/darker_gray"/>
-
-
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/add_category"
-        android:layout_below="@+id/view"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        android:text="Add Category"
-        />
 
 </RelativeLayout>
